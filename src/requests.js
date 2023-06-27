@@ -1,27 +1,50 @@
-function searchTracksByTitle(input, pageSize=8, page=1) {
-  if (!input) {
-    return [];
+async function checkToken() {
+}
+
+function generateRandomString(length) {
+  const options = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+  let str = '';
+  for (let i = 0; i < length; i++) {
+    str += options[Math.floor(Math.random() * options.length)];
   }
+  return str;
+}
 
-  const x = [];
+async function getToken() {
+  const client_id = '2a9bd2c2e47e46db8d5df9773db48dad';
+  const redirect_uri = 'http://192.168.68.80:3000/';
 
-  for (let i = 0; i < pageSize; i++) {
-    x.push(42 + (pageSize * (page - 1)) + i);
-  }
+  const state = generateRandomString(16);
+  localStorage.setItem('state', state);
 
-  return x;
+  const scope = 'playlist-modify-public playlist-modify-private';
+
+  let url = 'https://accounts.spotify.com/authorize/';
+  url += '?response_type=token';
+  url += '&client_id=' + encodeURIComponent(client_id);
+  url += '&scope=' + encodeURIComponent(scope);
+  url += '&redirect_uri=' + encodeURIComponent(redirect_uri);
+  url += '&state=' + encodeURIComponent(state);
+
+  let response = await fetch(url, {
+    method: 'GET',
+    mode: 'cors',
+  })
+  .then(response => {
+    if (response.ok) {
+      return response;
+    }
+    console.log(response)
+  });
+
+  console.log(response)
+}
+
+async function searchTracksByTitle(input, pageSize=8, page=0) {
+  getToken();
 }
 
 function getTrackById(id) {
-  id = {
-    id: id,
-    title: 'Never Gonna Give You Up ' + id,
-    album: 'Whenever You Need Somebody',
-    artist: 'Rick Astley',
-    year: '1987',
-    length: '3:35',
-  }
-  return id;
 }
 
 function addPlaylist(trackList, title) {

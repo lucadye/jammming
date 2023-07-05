@@ -1,10 +1,20 @@
 import TrackList from './TrackList.jsx';
 
-export default function Playlist({trackList, title, setTitle, removeFromPlaylist}) {
-  const button = {
-    function: removeFromPlaylist,
-    innerHTML: '-',
-  }
+export default function Playlist({trackList, title, setTitle, removeFromPlaylist, moveUpInPlaylist, moveDownInPlaylist}) {
+  const buttons = [
+    {
+      function: moveUpInPlaylist,
+      className: 'moveUpInPlaylist',
+    },
+    {
+      function: removeFromPlaylist,
+      className: 'removeFromPlaylist',
+    },
+    {
+      function: moveDownInPlaylist,
+      className: 'moveDownInPlaylist',
+    },
+  ];
   function inputHandler(e) {
     e.stopPropagation();
     setTitle(e.target.value);
@@ -12,7 +22,7 @@ export default function Playlist({trackList, title, setTitle, removeFromPlaylist
   return (
     <>
       <input id='playlist-title' placeholder='Name your playlist...' onInput={inputHandler} />
-      <TrackList trackList={trackList} button={button} />
+      <TrackList trackList={trackList} buttons={buttons} />
     </>
   );
 }

@@ -1,8 +1,14 @@
 import TrackButton from './TrackButton';
 
-export default function Track({trackData, index, button}) {
+export default function Track({trackData, index, buttons}) {
+  if (!trackData) {
+    return (<></>);
+  }
   return (
     <li className='track'>
+      <img className='track-cover'
+        src={trackData.cover}
+      />
       <h4 className='track-title'>
         {trackData.title}
       </h4>
@@ -18,7 +24,18 @@ export default function Track({trackData, index, button}) {
       <p className='track-length'>
         {trackData.length}
       </p>
-      <TrackButton id={trackData.id} index={index} buttonFunction={button.function}>{button.innerHTML}</TrackButton>
+      {
+        buttons.map(button => {
+          return (
+            <TrackButton
+              trackData={trackData}
+              index={index}
+              buttonFunction={button.function}
+              className={button.className}
+            />
+          );
+        })
+      }
     </li>
   );
 }

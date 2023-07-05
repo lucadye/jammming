@@ -1,8 +1,8 @@
-export default function TrackButton({id, index, children, buttonFunction}) {
+export default function TrackButton({trackData, index, children, buttonFunction, className}) {
   function clickHandler(e) {
-    buttonFunction({id, index});
+    buttonFunction({trackData, index});
   }
   return (
-    <button onClick={clickHandler}>{children}</button>
+    <button onClick={clickHandler} className={className} />
   )
 }

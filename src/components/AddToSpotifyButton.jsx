@@ -1,12 +1,16 @@
-import Requests from '../requests.js'
+import Spotify from '../SpotifyAPI.js'
 
-export default function AddToSpotifyButton({trackList, title, displayOutcome}) {
-  function clickHandler(e) {
+export default function AddToSpotifyButton({trackList, title, setAlertMessage}) {
+  async function clickHandler(e) {
   	e.stopPropagation()
-  	const outcome = Requests.addPlaylist(trackList, title)
-    displayOutcome(outcome);
+  	const uri = await Spotify.savePlaylist(trackList, title)
+    const message = (<>
+      <p>Added your new playlist to Spotify!</p>
+      <a href={uri} target='_blank' className='button'>View playlist</a>
+    </>);
+    setAlertMessage(message);
   }
-  return (
-  	<button onClick={clickHandler}>Add to Spotify</button>
-  );
+  return (<>
+  	{trackList.length > 0 && <button onClick={clickHandler}>Add to Spotify</button>}
+  </>);
 }

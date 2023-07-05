@@ -12,12 +12,12 @@ function App() {
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
 
-  function addToPlaylist({id}) {
+  function addToPlaylist({trackData}) {
     const arr = [];
     playlistTracks.forEach(track => {
       arr.push(track);
     })
-    arr.push(id);
+    arr.push(trackData);
     setPlaylistTracks(arr);
   }
 
@@ -30,24 +30,80 @@ function App() {
     setPlaylistTracks(arr);
   }
 
-  const [successfulyAdded, setSuccessfulyAdded] = useState(null);
-  function displayOutcome(isSuccessful) {
-    setSuccessfulyAdded(isSuccessful);
+  function moveUpInPlaylist({index}) {
+    if (index === 0) {
+      return;
+    }
+
+    let arr = [];
+    playlistTracks.forEach(track => {
+      arr.push(track);
+    })
+
+    const left = index === 1 ? [] : arr.slice(0, index - 1);
+    const right = index === playlistTracks.length - 1 ? [] : arr.slice(index + 1);
+
+    let tracks = [];
+    const x = i => {
+      tracks.push(i);
+    };
+
+    left.forEach(x);
+    tracks.push(arr[index]);
+    tracks.push(arr[index - 1]);
+    right.forEach(x);
+
+    setPlaylistTracks(tracks);
   }
+
+  function moveDownInPlaylist({index}) {
+    if (index === playlistTracks.length - 1) {
+      return;
+    }
+
+    let arr = [];
+    playlistTracks.forEach(track => {
+      arr.push(track);
+    })
+
+    const left = index === 0 ? [] : arr.slice(0, index);
+    const right = index === playlistTracks.length - 2 ? [] : arr.slice(index + 1);
+
+    let tracks = [];
+    const x = i => {
+      tracks.push(i);
+    };
+    
+    left.forEach(x);
+    tracks.push(arr[index + 1]);
+    tracks.push(arr[index]);
+    right.forEach(x);
+
+    setPlaylistTracks(tracks);
+  }
+
+  const [alertMessage, setAlertMessage] = useState(null);
   function resetAlert() {
-    setSuccessfulyAdded(null);
+    setAlertMessage(null);
   }
 
   return (
     <main className="App">
-      <Alert wasSuccessful={successfulyAdded} reset={resetAlert} />
+      <Alert message={alertMessage} reset={resetAlert} />
       <section id="search-area">
         <SearchBar displayResults={setSearchResults} />
-        {searchResults.length > 0 && (<SearchResults trackList={searchResults} addToPlaylist={addToPlaylist} />)}
+        <SearchResults trackList={searchResults} addToPlaylist={addToPlaylist} />
       </section>
       <section id="playlist-area">
-        <Playlist trackList={playlistTracks} title={playlistTitle} setTitle={setPlaylistTitle} removeFromPlaylist={removeFromPlaylist} />
-        <AddToSpotifyButton trackList={playlistTracks} title={playlistTitle} displayOutcome={displayOutcome} />
+        <Playlist
+          trackList={playlistTracks}
+          title={playlistTitle}
+          setTitle={setPlaylistTitle}
+          removeFromPlaylist={removeFromPlaylist}
+          moveUpInPlaylist={moveUpInPlaylist}
+          moveDownInPlaylist={moveDownInPlaylist}
+        />
+        <AddToSpotifyButton trackList={playlistTracks} title={playlistTitle} setAlertMessage={setAlertMessage} />
       </section>
     </main>
   );

@@ -1,4 +1,4 @@
-import Requests from '../requests.js';
+import Spotify from '../SpotifyAPI.js';
 
 function findInput(e) {
   let siblings = e.target.parentNode.children;
@@ -11,10 +11,10 @@ function findInput(e) {
 }
 
 function SearchBar({displayResults}) {
-  function inputHandler(e) {
+  async function inputHandler(e) {
     e.stopPropagation()
     const input = e.target.value;
-    const results = Requests.searchTracksByTitle(input)
+    const results = await Spotify.searchTracks(input);
     displayResults(results);
   }
   return (

@@ -1,14 +1,14 @@
 import TrackList from './TrackList.jsx';
 
 export default function Playlist({trackList, addToPlaylist}) {
-  const button = {
+  const buttons = [{
     function: addToPlaylist,
-    innerHTML: '+',
-  }
+    className: 'addToPlaylist',
+  }];
   return (
     <>
       <h2>Results</h2>
-      <TrackList trackList={trackList} button={button} />
+      <TrackList trackList={trackList} buttons={buttons} />
     </>
   );
 }

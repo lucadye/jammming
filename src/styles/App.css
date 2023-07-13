@@ -1,0 +1,116 @@
+@import "./scrollbar.css";
+@import "./tooltip.css";
+
+body {
+	background-color: #222;
+	font-size: 18px;
+	margin-top: 10px;
+}
+
+span.blue {
+	color: #1475ba;
+}
+
+h1 {
+	margin-top: 10px;
+	font-size: 48px;
+}
+
+main.App {
+	display: flex;
+}
+
+main.App > section {
+	width: 46vw;
+	display: flex;
+	flex-direction: column;
+	margin: 0 2vw;
+}
+
+@media only screen and (orientation: portrait) {
+	main.App {
+		flex-direction: column;
+	}
+
+	main.App > section {
+		width: 96vw;
+		display: flex;
+		flex-direction: column;
+		margin: 40px 2vw;
+	}
+}
+
+input[type=text] {
+	background-color: #0000;
+	border: #0000 solid 0;
+	border-bottom: #333 solid 5px;
+	font-size: 24px;
+	width: 80%;
+	margin: 0 auto 0;
+	border-radius: 0;
+}
+
+* {
+	color: #fff;
+	text-align: center;
+	padding: 0;
+	border-radius: 10px;
+}
+
+.button-container {
+	display: flex;
+}
+
+button {
+	background-color: #111;
+	border: solid 5px #333;
+	padding: 5px;
+	transition: 0.25s;
+	margin-right: 10px;
+}
+
+button:hover {
+	border: solid 5px #444;
+}
+
+button:active {
+	border: solid 5px #1475ba;
+}
+
+.track button {
+	margin: 2px 0 2px;
+}
+
+/*.track:hover button {
+	background-color: #222;
+	border: solid 5px #333;
+}*/
+
+button.add-to-spotify {
+	background-color: #111;
+	border: 5px #333 solid;
+	width: fit-content;
+	height: fit-content;
+	margin: 10px auto;
+	padding: 10px;
+	font-weight: bolder;
+	font-size: 16px;
+}
+
+button.add-to-spotify:hover {
+	border-color: #1475ba;
+}
+
+.SearchPageSelector {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
+}
+
+.SearchPageSelector > * {
+	margin: 0 10px;
+	width: 32px;
+	height: 32px;
+}

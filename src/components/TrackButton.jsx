@@ -3,6 +3,6 @@ export default function TrackButton({trackData, index, children, buttonFunction,
     buttonFunction({trackData, index});
   }
   return (
-    <button onClick={clickHandler} className={className} />
+    <button onClick={clickHandler} className={className}>{children}</button>
   )
 }

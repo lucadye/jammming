@@ -74,7 +74,7 @@ Spotify.getToken = async () => {
   }
 };
 
-Spotify.searchTracks = async (query, pageSize=8, page=0) => {
+Spotify.searchTracks = async (query, pageSize=4, page=0) => {
   if (!query) {
     return undefined;
   }
@@ -112,6 +112,7 @@ Spotify.searchTracks = async (query, pageSize=8, page=0) => {
       album: album.name,
       artist: Spotify.format.artists(track.artists),
       cover: Spotify.format.images(album.images),
+      explicit: track.explicit,
     };
   });
 }
@@ -142,6 +143,7 @@ Spotify.getTrack = async id => {
     year: Spotify.format.date(album.release_date, album.release_date),
     album: album.name,
     artist: Spotify.format.artists(track.artists),
+    explicit: track.explicit,
   };
   return track;
 }
@@ -225,7 +227,6 @@ Spotify.savePlaylist = async (trackList, title) => {
   let userID = await Spotify.getUserID();
   const response = await Spotify.createPlaylist(userID, title);
   Spotify.fillPlaylist(trackList, response.id);
-  console.log(response)
   return response.external_urls.spotify;
 }
 

@@ -1,16 +1,37 @@
 import React, { useState } from 'react';
 
-import SearchBar from './containers/SearchBar.jsx';
+import Spotify from './SpotifyAPI.js';
+
 import SearchResults from './containers/SearchResults.jsx';
 import Playlist from './containers/Playlist.jsx';
 
 import AddToSpotifyButton from './components/AddToSpotifyButton.jsx';
 import Alert from './components/Alert.jsx';
+import SearchBar from './components/SearchBar.jsx';
+import SearchPageSelector from './components/SearchPageSelector.jsx';
+
+import './styles/App.css';
 
 function App() {
+  Spotify.getToken();
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchPage, setSearchPage] = useState(0);
+  const [searchResults, setSearchResults] = useState([]);
+
+  function search() {
+    if (!searchQuery) {
+      setSearchResults([]);
+      return;
+    }
+    Spotify.searchTracks(searchQuery, 10, searchPage * 10)
+    .then(results => {
+      setSearchResults(results);
+    });
+  }
+
   const [playlistTitle, setPlaylistTitle] = useState('');
   const [playlistTracks, setPlaylistTracks] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
 
   function addToPlaylist({trackData}) {
     const arr = [];
@@ -67,7 +88,7 @@ function App() {
     })
 
     const left = index === 0 ? [] : arr.slice(0, index);
-    const right = index === playlistTracks.length - 2 ? [] : arr.slice(index + 1);
+    const right = index === playlistTracks.length - 2 ? [] : arr.slice(index + 2);
 
     let tracks = [];
     const x = i => {
@@ -91,8 +112,9 @@ function App() {
     <main className="App">
       <Alert message={alertMessage} reset={resetAlert} />
       <section id="search-area">
-        <SearchBar displayResults={setSearchResults} />
+        <SearchBar search={search} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <SearchResults trackList={searchResults} addToPlaylist={addToPlaylist} />
+        <SearchPageSelector search={search} searchPage={searchPage} setSearchPage={setSearchPage} display={searchResults.length} />
       </section>
       <section id="playlist-area">
         <Playlist
@@ -103,7 +125,18 @@ function App() {
           moveUpInPlaylist={moveUpInPlaylist}
           moveDownInPlaylist={moveDownInPlaylist}
         />
-        <AddToSpotifyButton trackList={playlistTracks} title={playlistTitle} setAlertMessage={setAlertMessage} />
+        <AddToSpotifyButton
+          trackList={playlistTracks}
+          title={playlistTitle}
+          setAlertMessage={setAlertMessage}
+          reset={()=>{
+            setPlaylistTitle('');
+            setPlaylistTracks([]);
+            setSearchQuery('');
+            setSearchResults([]);
+            setSearchPage(0);
+          }}
+        />
       </section>
     </main>
   );

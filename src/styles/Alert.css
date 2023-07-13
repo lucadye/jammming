@@ -1,0 +1,14 @@
+.alert {
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	background-color: #333;
+	border: solid 5px #1475ba;
+	z-index: 100;
+	width: 278px;
+	height: 180px;
+}

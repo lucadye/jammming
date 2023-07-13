@@ -5,10 +5,13 @@ export default function Playlist({trackList, addToPlaylist}) {
     function: addToPlaylist,
     className: 'addToPlaylist',
   }];
+  const buttonsContent = [
+    (<i className="fa-solid fa-plus"></i>)
+  ];
   return (
     <>
-      <h2>Results</h2>
-      <TrackList trackList={trackList} buttons={buttons} />
+      {trackList.length > 0 && <h2>Search Results</h2>}
+      <TrackList trackList={trackList} buttons={buttons} buttonsContent={buttonsContent} />
     </>
   );
 }

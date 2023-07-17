@@ -7,7 +7,7 @@ export default function AddToSpotifyButton({trackList, title, setAlertMessage, r
     reset();
     const message = (<>
       <p>Added your new playlist to Spotify!</p>
-      <a href={uri} target='_blank' className='button'>View playlist</a>
+      <a href={uri} target='_blank' rel='noreferrer' className='button'>View playlist</a>
     </>);
     setAlertMessage(message);
   }

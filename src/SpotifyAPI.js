@@ -113,6 +113,7 @@ Spotify.searchTracks = async (query, pageSize=4, page=0) => {
       artist: Spotify.format.artists(track.artists),
       cover: Spotify.format.images(album.images),
       explicit: track.explicit,
+      preview: track.preview_url,
     };
   });
 }
@@ -144,6 +145,7 @@ Spotify.getTrack = async id => {
     album: album.name,
     artist: Spotify.format.artists(track.artists),
     explicit: track.explicit,
+    preview: track.preview_url,
   };
   return track;
 }

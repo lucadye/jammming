@@ -30,7 +30,7 @@ export default function Playlist({trackList, title, setTitle, removeFromPlaylist
     <>
       <input id='playlist-title' type='text' placeholder='Name your playlist...' onInput={inputHandler} />
       {trackList.length > 0 && <h2>Selected Songs</h2>}
-      <TrackList trackList={trackList} buttons={buttons} buttonsContent={buttonsContent} />
+      <TrackList trackList={trackList} buttons={buttons} buttonsContent={buttonsContent} namespace='playlist' />
     </>
   );
 }

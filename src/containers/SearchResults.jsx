@@ -11,7 +11,7 @@ export default function Playlist({trackList, addToPlaylist}) {
   return (
     <>
       {trackList.length > 0 && <h2>Search Results</h2>}
-      <TrackList trackList={trackList} buttons={buttons} buttonsContent={buttonsContent} />
+      <TrackList trackList={trackList} buttons={buttons} buttonsContent={buttonsContent} namespace='SearchResults' />
     </>
   );
 }

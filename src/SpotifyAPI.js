@@ -1,8 +1,8 @@
 const Spotify = {}
 
 Spotify.token = undefined;
-Spotify.redirectUri = 'http://192.168.68.80:3000/'
-Spotify.clientId = '2a9bd2c2e47e46db8d5df9773db48dad'
+Spotify.redirectUri = process.env.BASE_URI;
+Spotify.clientId = process.env.CLIENT_ID;
 
 Spotify.randomString = length => {
   const options = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'

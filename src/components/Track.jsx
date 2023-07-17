@@ -1,18 +1,6 @@
 import React, { useState } from 'react';
 import TrackButton from './TrackButton';
 
-function trimmer(input, length) {
-  if (input.length > length) {
-    let str = "";
-    for (let i = 0; i < length-2; i++) {
-      str += input[i];
-    }
-    str += "..."
-    return str;
-  }
-  return input;
-}
-
 export default function Track({trackData, index, buttons, buttonsContent, namespace}) {
   const [audioPlaying, setAudioPlaying] = useState(null);
   const [playbackPromise, setPlaybackPromise] = useState(null)
@@ -36,6 +24,7 @@ export default function Track({trackData, index, buttons, buttonsContent, namesp
     <li className='track'>
 
       <img className='track-cover'
+        alt={`${trackData.album} cover`}
         src={trackData.cover}
       />
 

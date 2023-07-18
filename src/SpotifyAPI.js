@@ -1,7 +1,7 @@
 const Spotify = {}
 
 Spotify.token = undefined;
-Spotify.redirectUri = 'https://lucadye-jammming.netlify.app/';
+Spotify.redirectUri = 'https://dyenamite-jammming.netlify.app/';
 Spotify.clientId = '2a9bd2c2e47e46db8d5df9773db48dad';
 
 Spotify.randomString = length => {

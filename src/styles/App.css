@@ -11,6 +11,10 @@ span.blue {
 	color: #1475ba;
 }
 
+img.title {
+	max-width: 12.5vw;
+}
+
 h1 {
 	margin-top: 10px;
 	font-size: 48px;

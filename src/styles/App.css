@@ -12,7 +12,9 @@ span.blue {
 }
 
 img.title {
-	max-width: 25vw;
+    width: 25vw;
+    min-width: 340px;
+    max-width: 90vw;
 }
 
 h1 {

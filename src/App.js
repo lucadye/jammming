@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 
+// Helpers
 import Spotify from './SpotifyAPI.js';
 
+// Containers
 import SearchResults from './containers/SearchResults.jsx';
 import Playlist from './containers/Playlist.jsx';
 
+// Components
 import AddToSpotifyButton from './components/AddToSpotifyButton.jsx';
 import Alert from './components/Alert.jsx';
 import SearchBar from './components/SearchBar.jsx';
 import SearchPageSelector from './components/SearchPageSelector.jsx';
 
+// Styles
 import './styles/App.css';
 
 function App() {
-  Spotify.getToken();
+  Spotify.getToken(); // Makes user sign in to Spotify first
 
+  // Search functionality
   const [searchQuery, setSearchQuery] = useState('');
   const [searchPage, setSearchPage] = useState(0);
   const [searchResults, setSearchResults] = useState([]);
@@ -30,6 +35,7 @@ function App() {
     });
   }
 
+  // Playlist functionality
   const [playlistTitle, setPlaylistTitle] = useState('');
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
@@ -103,6 +109,7 @@ function App() {
     setPlaylistTracks(tracks);
   }
 
+  // Used to inform the user that there playlist has been added to Spotify
   const [alertMessage, setAlertMessage] = useState(null);
   function resetAlert() {
     setAlertMessage(null);
@@ -110,12 +117,15 @@ function App() {
 
   return (
     <main className="App">
+    
       <Alert message={alertMessage} reset={resetAlert} />
+
       <section id="search-area">
         <SearchBar search={search} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <SearchResults trackList={searchResults} addToPlaylist={addToPlaylist} />
         <SearchPageSelector search={search} searchPage={searchPage} setSearchPage={setSearchPage} display={searchResults.length} />
       </section>
+
       <section id="playlist-area">
         <Playlist
           trackList={playlistTracks}
@@ -138,6 +148,7 @@ function App() {
           }}
         />
       </section>
+
     </main>
   );
 }

@@ -1,21 +1,15 @@
+// Setup for the Spotify export
 const Spotify = {}
 
 Spotify.token = undefined;
 Spotify.redirectUri = 'https://dyenamite-jammming.netlify.app/';
 Spotify.clientId = '2a9bd2c2e47e46db8d5df9773db48dad';
 
-Spotify.randomString = length => {
-  const options = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-  let str = '';
-  for (let i = 0; i < length; i++) {
-    str += options[Math.floor(Math.random() * options.length)];
-  }
-  return str;
-}
-
+// Setup for the Spotify.format export
 const format = {};
 
 format.artists = artists => {
+  // Concatenate all of the artists with ', ' between each one
   let str = '';
   artists.forEach(artist => {
     if (str) {
@@ -44,16 +38,36 @@ format.time = ms => {
 }
 
 format.images = images => {
+  // Make sure there is at least one image, then return the first one
   return images.length > 0 ? images[0].url : undefined;
+}
+
+format.trackData = data => {
+  let album = track.album; // For readability
+  return {
+    id: track.id,
+    title: track.name,
+    length: format.time(track.duration_ms),
+    year: format.date(album.release_date, album.release_date),
+    album: album.name,
+    artist: format.artists(track.artists),
+    cover: format.images(album.images),
+    explicit: track.explicit,
+    preview: track.preview_url,
+  };
 }
 
 Spotify.format = format;
 
+// Main Spotify methods
+
 Spotify.getToken = async () => {
+  // If the token has already been requested, return it
   if (Spotify.token) {
     return Spotify.token;
   }
 
+  // Extract the token from the current url
   const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
   const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
   const error = window.location.href.match(/error=([^&]*)/);
@@ -75,9 +89,12 @@ Spotify.getToken = async () => {
 };
 
 Spotify.searchTracks = async (query, pageSize=4, page=0) => {
+  // If no query is provided, return nothing
   if (!query) {
     return undefined;
   }
+
+  // Setup the request url
   const token = await Spotify.getToken();
   let url = 'https://api.spotify.com/v1/search';
   url += '?type=track';
@@ -85,6 +102,7 @@ Spotify.searchTracks = async (query, pageSize=4, page=0) => {
   url += `&limit=${pageSize}`;
   url += `&offset=${page}`;
 
+  // Make the request then convert the response to an object
   let response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -99,29 +117,22 @@ Spotify.searchTracks = async (query, pageSize=4, page=0) => {
     }
     return response.json();
   });
+
+  // Make sure there are results
   if (!response.tracks) {
     return [];
   }
-  return response.tracks.items.map(track => {
-    let album = track.album;
-    return {
-      id: track.id,
-      title: track.name,
-      length: Spotify.format.time(track.duration_ms),
-      year: Spotify.format.date(album.release_date, album.release_date),
-      album: album.name,
-      artist: Spotify.format.artists(track.artists),
-      cover: Spotify.format.images(album.images),
-      explicit: track.explicit,
-      preview: track.preview_url,
-    };
-  });
+
+  // Format the results then return them
+  return response.tracks.items.map(t => format.trackData(t));
 }
 
 Spotify.getTrack = async id => {
+  // Setup the request url
   const token = await Spotify.getToken();
   let url = `https://api.spotify.com/v1/tracks/${id}`;
 
+  // Make the request then convert the response to an object
   let track = await fetch(url, {
     method: 'GET',
     headers: {
@@ -136,24 +147,17 @@ Spotify.getTrack = async id => {
     }
     return response.json();
   });
-  let album = track.album;
-  track = {
-    id: track.id,
-    title: track.name,
-    length: Spotify.format.time(track.duration_ms),
-    year: Spotify.format.date(album.release_date, album.release_date),
-    album: album.name,
-    artist: Spotify.format.artists(track.artists),
-    explicit: track.explicit,
-    preview: track.preview_url,
-  };
-  return track;
+
+  // Format the track object then return it
+  return format.trackData(track);
 }
 
 Spotify.getUserID = async () => {
+  // Setup the request url
   const token = await Spotify.getToken();
   let url = `https://api.spotify.com/v1/me`;
 
+  // Make the request then convert the response to an object
   let response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -168,15 +172,20 @@ Spotify.getUserID = async () => {
     }
     return response.json();
   });
+
+  // Return the user id out of the response object
   return response.id;
 }
 
 Spotify.createPlaylist =  async (userID, title) => {
+  // Setup the request url
   const token = await Spotify.getToken();
   let url = `https://api.spotify.com/v1/users/${userID}/playlists`;
 
+  // Make the request then convert the response to an object
   let response = await fetch(url, {
     method: 'POST',
+    // Include all of the playlist info in the body
     body: JSON.stringify({
       "name": title ? title : 'My Playlist',
       "description": "Made using Jammming.",
@@ -194,19 +203,25 @@ Spotify.createPlaylist =  async (userID, title) => {
     }
     return response.json();
   });
+
+  // Return all of the new playlist's data
   return response;
 };
 
 Spotify.fillPlaylist =  async (trackList, id) => {
+  // Reformat all of the track ids provided into uris 
   const uris = trackList.map(track => {
     return `spotify:track:${track.id}`;
   });
 
+  // Setup the request url
   const token = await Spotify.getToken();
   let url = `https://api.spotify.com/v1/playlists/${id}/tracks`;
 
+  // Make the request then convert the response to an object
   let response = await fetch(url, {
     method: 'POST',
+    // Include all of the uris in the body
     body: JSON.stringify({
       "uris": uris,
     }),
@@ -222,13 +237,19 @@ Spotify.fillPlaylist =  async (trackList, id) => {
     }
     return response.json();
   });
+
+  // Return the result of the request
   return response;
 };
 
 Spotify.savePlaylist = async (trackList, title) => {
+  // Get the user id
   let userID = await Spotify.getUserID();
+  // Create an empty playlist using the user id
   const response = await Spotify.createPlaylist(userID, title);
+  // Add all of the selected tracks to the new playlist
   Spotify.fillPlaylist(trackList, response.id);
+  // Return the url of the new playlist
   return response.external_urls.spotify;
 }
 

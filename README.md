@@ -3,6 +3,8 @@ A web app that uses the Spotify API to allow users to search the Spotify library
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Here's a link to [the finished product](https://dyenamite-jammming.netlify.app/)
+
 ## Available Scripts
 
 In the project directory, you can run:
